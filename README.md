@@ -14,7 +14,7 @@ Python file descriptions:
 -- reference: https://stackoverflow.com/questions/72062001/remove-everything-of-a-specific-color-with-a-color-variation-tolerance-from-an 
 
 2_plantcv.py \
--- use plantcv to obtain area (in absolute number of pixels) and root angles (in degrees) from folder containing segmented images. Outputs binarized images to a folder, skeletonized images to another folder, and resulting tables.csv file to a third folder. The `tables.csv` file contains 3 columns: 1) image filename, 2) pixel area, and 3) root angle
+-- use plantcv to obtain area (in absolute number of pixels) and root angles (in degrees) from folder containing segmented images. Outputs binarized images to a folder, skeletonized images to another folder, and resulting tables.csv file to a third folder. The `tables.csv` file contains 3 columns: 1. image filename, 2. root area, and 3. root angle
 -- 1) binarize segmented image \
 -- 2) blur small objects and fill in holes (improves skeletonize) \
 -- 3) crop mask to focus on lateral root growth \
