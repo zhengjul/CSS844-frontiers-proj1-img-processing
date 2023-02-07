@@ -1,19 +1,19 @@
 # CSS844-frontiers-proj1-img-processing
 Group members: Farnaz and Julia
 
-Image files: Cross sectional images of maize roots (no scale bar)
-Treatment groups: 6, combinations of the following treatments:
+Image files: Cross sectional images of maize roots (no scale bar)\
+Treatment groups: 6, combinations of the following treatments:\
 1. Nitrogen deficient and normal Nitrogen
 2. Biostimulant 1, Biostimulant 2, and control
 
-Python file descriptions:
-1_image_segmentation.py 
--- use opencv to perform colour range thresholding on a folder containing images. BGR colour ranges found using eyedropped in ms paint. Outputs segmented images to output folder.
--- 1) Background removed
--- 2) Top left 25% of image underwent thresholding to remove the yellow name tag.      
--- reference: https://stackoverflow.com/questions/72062001/remove-everything-of-a-specific-color-with-a-color-variation-tolerance-from-an
+Python file descriptions:\
+1_image_segmentation.py \
+-- use opencv to perform colour range thresholding on a folder containing images. BGR colour ranges found using eyedropped in ms paint. Outputs segmented images to output folder.\
+-- 1) Background removed\
+-- 2) Top left 25% of image underwent thresholding to remove the yellow name tag.     \ 
+-- reference: https://stackoverflow.com/questions/72062001/remove-everything-of-a-specific-color-with-a-color-variation-tolerance-from-an\
 
-2_plantcv.py 
+2_plantcv.py \
 -- use plantcv to obtain area (in absolute number of pixels) and root angles (in degrees) from folder containing segmented images. Outputs binarized images to a folder, skeletonized images to another folder, and resulting tables.csv file to a third folder. The `tables.csv` file contains 3 columns: 1) image filename, 2) pixel area, and 3) root angle
 -- 1) binarize segmented image 
 -- 2) blur small objects and fill in holes (improves skeletonize)
