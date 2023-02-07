@@ -7,6 +7,7 @@ Treatment groups: 6, combinations of the following treatments:
 2. Biostimulant 1, Biostimulant 2, and control
 
 Python file descriptions:
+
 1_image_segmentation.py \
 -- use opencv to perform colour range thresholding on a folder containing images. BGR colour ranges found using eyedropped in ms paint. Outputs segmented images to output folder \
 -- 1) Background removed \
