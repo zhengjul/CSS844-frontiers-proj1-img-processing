@@ -8,9 +8,9 @@ Treatment groups: 6, combinations of the following treatments:
 
 Python file descriptions:
 1_image_segmentation.py \
--- use opencv to perform colour range thresholding on a folder containing images. BGR colour ranges found using eyedropped in ms paint. Outputs segmented images to output folder \ 
--- 1) Background removed \
--- 2) Top left 25% of image underwent thresholding to remove the yellow name tag \ 
+-- use opencv to perform colour range thresholding on a folder containing images. BGR colour ranges found using eyedropped in ms paint. Outputs segmented images to output folder
+-- 1) Background removed
+-- 2) Top left 25% of image underwent thresholding to remove the yellow name tag
 -- reference: https://stackoverflow.com/questions/72062001/remove-everything-of-a-specific-color-with-a-color-variation-tolerance-from-an 
 
 2_plantcv.py \
