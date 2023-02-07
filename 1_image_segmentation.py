@@ -46,17 +46,11 @@ def colour_thresh_segmentation(infile, outfile):
  h,w,channel = image.shape
  subsect = image[0:math.floor(h/2),0:math.floor(w/2),:]
 
- old_high = np.array([65, 180, 200],np.uint8)
- old_low = np.array([60, 170, 190],np.uint8)
+  old_high = np.array([90, 190, 215],np.uint8)
+ old_low = np.array([60, 170, 180],np.uint8)
  mask = cv2.inRange(subsect, old_low, old_high)
  kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (100,100))
  mask1 = cv2.dilate(mask, kernel, iterations=1)
-
- old_high = np.array([70, 190, 215],np.uint8)
- old_low = np.array([60, 180, 205],np.uint8)
- mask = cv2.inRange(subsect, old_low, old_high)
- kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (100,100)) # remove within 100pixel region
- mask2 = cv2.dilate(mask, kernel, iterations=1)
 
  old_high = np.array([50, 140, 165],np.uint8)
  old_low = np.array([45, 130, 155],np.uint8)
@@ -71,7 +65,7 @@ def colour_thresh_segmentation(infile, outfile):
  mask4 = cv2.dilate(mask, kernel, iterations=1)
 
  # grey text on yellow tag
- old_high = np.array([65, 65, 55],np.uint8)
+ old_high = np.array([70, 70, 70],np.uint8)
  old_low = np.array([60, 60, 50],np.uint8)
  mask = cv2.inRange(subsect, old_low, old_high)
  kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (10,10)) # remove within 100pixel region
@@ -84,8 +78,14 @@ def colour_thresh_segmentation(infile, outfile):
  kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (100,100)) # remove within 100pixel region
  mask6 = cv2.dilate(mask, kernel, iterations=1)
 
+ old_high = np.array([250, 250, 250],np.uint8)
+ old_low = np.array([177, 177, 176],np.uint8)
+ mask = cv2.inRange(subsect, old_low, old_high)
+ kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (100,100)) # remove within 100pixel region
+ mask7 = cv2.dilate(mask, kernel, iterations=1)
+
  #combine all masks to clean out the yellow tag marker in the top left section of the image (25% of image)
- combined_mask = mask1 | mask2 | mask3 | mask4 | mask5 | mask6
+ combined_mask = mask1 | mask3 | mask4 | mask5 | mask6 | mask7
  subsect[combined_mask>0] = [0,0,0]
  image[0:math.floor(h/2),0:math.floor(w/2),:] = subsect
 
