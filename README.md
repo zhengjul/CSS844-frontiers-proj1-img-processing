@@ -4,7 +4,7 @@ Group members: Farnaz and Julia
 Image files: Cross sectional images of maize roots (no scale bar)
 Treatment groups: 6, combinations of the following treatments:
 1. Nitrogen deficient and normal Nitrogen
-2. Biostimulant 1, Biostimulant 1, and control
+2. Biostimulant 1, Biostimulant 2, and control
 
 Python file descriptions:
 1_image_segmentation.py 
