@@ -46,7 +46,7 @@ def colour_thresh_segmentation(infile, outfile):
  h,w,channel = image.shape
  subsect = image[0:math.floor(h/2),0:math.floor(w/2),:]
 
-  old_high = np.array([90, 190, 215],np.uint8)
+ old_high = np.array([90, 190, 215],np.uint8)
  old_low = np.array([60, 170, 180],np.uint8)
  mask = cv2.inRange(subsect, old_low, old_high)
  kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (100,100))

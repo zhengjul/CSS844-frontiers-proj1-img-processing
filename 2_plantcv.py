@@ -113,67 +113,59 @@ if __name__ == "__main__":
  indir = '/mnt/home/zhengjul/class/frontiers/work/1_segmentation/'  #read in segmented images
  outdir_binary='/mnt/home/zhengjul/class/frontiers/work/2_binary_thresh/' #output binary threshold images
  outdir_plantcv='/mnt/home/zhengjul/class/frontiers/work/3_plantcv_img/' #output plantcv image results
+ # 'img','area','angle'
  outfile_tables='/mnt/home/zhengjul/class/frontiers/work/4_tables/tables.csv' #output into one table the mask area and output "root angle" (suspicious, skeletonize is too detailed for this to be correct based on visual inspection)
 
- #create pandas dataframe 
- df = pd.DataFrame(columns=['img','area','angle'])
+
  # analyze all figures
+ with open(outfile_tables_backup, 'r') as f:
+  imgs_done = f.read()
 
  for infile in glob.glob(indir+"*"):
   filename = os.path.basename(infile)
   outfile_binary = outdir_binary + filename
   outfile_plantcv = outdir_plantcv + filename
-  print(filename)
+  #print(filename)
 
-  # binarize image into black or white
-  image, path, filename = pcv.readimage(infile, mode="gray")
-  binary_img = pcv.threshold.binary(gray_img=image, threshold=10, max_value=255, object_type='light')
-  pcv.print_image(binary_img, outfile_binary)
-  print("output binary img")
+  if not filename in imgs_done: #if filename is not in finishd file
+   print(filename)
 
-  # fill in any holes so that skeletonize won't capture too much details
-  binary_img = pcv.median_blur(gray_img=binary_img, ksize=5) # blur
-  mask = pcv.fill(bin_img=binary_img, size=500) # fill in holes
+   # binarize image into black or white
+   image, path, filename = pcv.readimage(infile, mode="gray")
+   binary_img = pcv.threshold.binary(gray_img=image, threshold=10, max_value=255, object_type='light')
+   pcv.print_image(binary_img, outfile_binary)
+   print("output binary img")
 
-  # manually crop the mask to focus on the lateral root angle
-  cropped_mask = mask[2000:4000, 2000:4000]
+   # fill in any holes so that skeletonize won't capture too much details
+   binary_img = pcv.median_blur(gray_img=binary_img, ksize=5) # blur
+   mask = pcv.fill(bin_img=binary_img, size=500) # fill in holes
 
-  #skeletonize
-  skeleton = pcv.morphology.skeletonize(mask=cropped_mask)
-  # Adjust line thickness with the global line thickness parameter
-  pcv.params.line_thickness = 200 
-  pcv.print_image(skeleton, outfile_plantcv)
-  print("output skeleton img")
+   # manually crop the mask to focus on the lateral root angle
+   cropped_mask = mask[1300:3000, 1300:3000]
 
-  # Prune the skeleton  
-  pruned, seg_img, edge_objects = pcv.morphology.prune(skel_img=skeleton, size=0, mask=cropped_mask)
+   #skeletonize
+   skeleton = pcv.morphology.skeletonize(mask=cropped_mask)
+   # Adjust line thickness with the global line thickness parameter
+   pcv.params.line_thickness = 200 
+   pcv.print_image(skeleton, outfile_plantcv)
+   print("output skeleton img")
 
-  # Identify branch points   
-  branch_pts_mask = pcv.morphology.find_branch_pts(skel_img=skeleton, mask=cropped_mask, label="default")
+   # Prune the skeleton  
+   pruned, seg_img, edge_objects = pcv.morphology.prune(skel_img=skeleton, size=0, mask=cropped_mask)
 
-  # Identify tip points   
-  tip_pts_mask = pcv.morphology.find_tips(skel_img=skeleton, mask=None, label="default")
+   # Identify branch points   
+   branch_pts_mask = pcv.morphology.find_branch_pts(skel_img=skeleton, mask=cropped_mask, label="default")
 
-  """
-  # Sort segments into branch objects and stem objects  
-  branch_obj, stem_obj = pcv.morphology.segment_sort(skel_img=skeleton, 
-                                                     objects=edge_objects,
-                                                     mask=cropped_mask)
-  # Identify segments     
-  segmented_img, labeled_img = pcv.morphology.segment_id(skel_img=skeleton,
-                                                           objects=branch_obj,
-                                                           mask=cropped_mask)
-  """
-  print("prior to calc angle")
-  # add results to df as new row
-  ret,thresh=cv2.threshold(binary_img,10,255,cv2.THRESH_BINARY_INV)
-  area = cv2.countNonZero(thresh)    # mask area
-  angle = calculate_branch_angle(tip_pts_mask,branch_pts_mask) # root angle
-  print("after calc angle")
+   # Identify tip points   
+   tip_pts_mask = pcv.morphology.find_tips(skel_img=skeleton, mask=None, label="default")
 
-  row = {'img':filename, 'area':area, 'angle':angle}
-  df = df.append(row, ignore_index=True)
-  print("save row data "+str(area)+" "+str(angle))
+   print("prior to calc angle")
+   # add results to df as new row
+   ret,thresh=cv2.threshold(binary_img,10,255,cv2.THRESH_BINARY_INV)
+   area = cv2.countNonZero(thresh)    # mask area
+   angle = calculate_branch_angle(tip_pts_mask,branch_pts_mask) # root angle
+   print("after calc angle")
 
- # use pandas to export table to csv
- df.to_csv(outfile_tables, index = False)
+   print("save row data "+str(area)+" "+str(angle))
+   with open(outfile_tables,"a+") as out:
+    out.write(filename+","+str(area)+","+str(angle)+"\n")
